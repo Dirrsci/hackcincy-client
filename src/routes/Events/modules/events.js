@@ -147,7 +147,7 @@ const ACTION_HANDLERS = {
   [SET_EVENTS]: (state, action) => {
     return {
       ...state,
-      events: action.eventInstances
+      events: action.payload
     }
   }
 }
