@@ -9,7 +9,6 @@ class Login extends Component {
       username: '',
       password: ''
     }
-
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -38,7 +37,7 @@ class Login extends Component {
           </label>
           <span className='error'>{(this.props.loginError) ? this.props.loginError : null}</span>
           <span className='user'>{(this.props.user) ? this.props.user : null}</span>
-          <button onClick={this.handleSubmit}>Submit</button>
+          <button onClick={this.handleSubmit}>Login</button>
       </div>
     )
   }
