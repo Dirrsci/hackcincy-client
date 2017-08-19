@@ -18,7 +18,11 @@ module.exports = {
   /** A hash map of keys that the compiler should treat as external to the project */
   externals: {},
   /** A hash map of variables and their values to expose globally */
-  globals: {},
+  globals: {
+    API_URL: JSON.stringify('http://localhost:8080'),
+    WEB3_ADDRESS: JSON.stringify('http://192.168.12.226:8545'),
+    MASTER_CONTRACT_ADDRESS: JSON.stringify('0x8700a919361091dda2d9c2e36ebc133dbc0b6a12')
+  },
   /** Whether to enable verbose logging */
   verbose: false,
   /** The list of modules to bundle separately from the core application code */
