@@ -19,6 +19,7 @@ export const GET_EVENTS = 'GET_EVENTS'
 export const CLICK_BUY_TICKET = 'CLICK_BUY_TICKET'
 export const BUY_TICKET = 'BUY_TICKET'
 export const SET_CONTRACT_INFO = 'SET_CONTRACT_INFO'
+export const SET_EVENTS = 'SET_EVENTS'
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
@@ -29,24 +30,49 @@ export const getEvents = () => {
     // TODO: Update this
     const { abis, terrapinAddr } = getState().events;
     let terrapinInstance = getContractInstance(abis.terrapin.abi, terrapinAddr);
-    return new Promise((resolve, reject) => {
-      terrapinInstance.methods.getEvents().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'}, (err, data) => {
-        if (err) return reject(err);
-        resolve(data);
-      });
-    })
-    .then((eventAddrs) => {
-      let eventInstances = [];
+    return Promise.resolve()
+      .then(() => terrapinInstance.methods.getEvents().call())
+      .then((eventAddrs) => {
+        let eventInstances = [];
 
-      return pasync.eachSeries(eventAddrs, (eventAddr) => {
-        let eventInstance = getContractInstance(abis.event.abi, eventAddr);
-        eventInstances.push(eventInstance);
-        return eventInstance.methods.name().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'})
-          .then((name) => {
-            console.log('name: ', utils.toAscii(name));
+        return pasync.eachSeries(eventAddrs, (eventAddr) => {
+          let eventInstance = getContractInstance(abis.event.abi, eventAddr);
+          // tickets, name
+          let eventObj = {};
+          return Promise.resolve()
+            .then(() => eventInstance.methods.owner().call())
+            .then((owner) => {
+              eventObj.owner = owner;
+            })
+            .then(() => eventInstance.methods.name().call())
+            .then((name) => {
+              eventObj.name = utils.toAscii(name);
+            })
+            .then(() => eventInstance.methods.getTickets().call())
+            .then((ticketAddrs) => {
+              let tickets = [];
+              return pasync.eachSeries(ticketAddrs, (ticketAddr) => {
+                let ticketInstance = getContractInstance(abis.ticket.abi, ticketAddr);
+                let ticketObj = {};
+                return ticketInstance.methods.price().call()
+                  .then((price) => ticketObj.price = price)
+                  .then(() => ticketInstance.methods.owner().call())
+                  .then((owner) => ticketObj.owner = owner)
+                  .then(() => tickets.push(ticketObj));
+              })
+              // set this events tickets
+              .then(() => eventObj.tickets = tickets)
+            })
+            .then(() => eventInstances.push(eventObj))
+        })
+        .then(() => {
+          console.log(eventInstances);
+          dispatch({
+            type: SET_EVENTS,
+            payload: eventInstances
           })
-      });
-    })
+        });
+      })
   }
 }
 
@@ -116,6 +142,12 @@ const ACTION_HANDLERS = {
       ...state,
       abis: JSON.parse(action.payload.abis),
       terrapinAddr: action.payload.terrapinAddr
+    }
+  },
+  [SET_EVENTS]: (state, action) => {
+    return {
+      ...state,
+      events: action.eventInstances
     }
   }
 }
