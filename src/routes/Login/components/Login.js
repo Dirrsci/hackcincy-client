@@ -22,7 +22,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div className='container' >
+      <div className='login-container' >
           <label className='label'>
             <span>Username:</span>
             <input type="text" value={this.state.username} onChange={(e) => {

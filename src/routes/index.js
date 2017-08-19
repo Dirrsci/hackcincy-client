@@ -4,6 +4,8 @@ import Home from './Home'
 import CounterRoute from './Counter'
 import LoginRoute from './Login'
 import EventsRoute from './Events'
+import CreateEventRoute from './CreateEvent'
+import UserRoute from './User'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -15,7 +17,9 @@ export const createRoutes = (store) => ({
   childRoutes : [
     CounterRoute(store),
     LoginRoute(store),
-    EventsRoute(store)
+    EventsRoute(store),
+    CreateEventRoute(store),
+    UserRoute(store),
   ]
 })
 

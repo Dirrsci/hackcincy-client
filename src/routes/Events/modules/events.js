@@ -7,8 +7,7 @@ let web3 = new Web3(new Web3.providers.HttpProvider(WEB3_ADDRESS));
 console.log('web3: ', web3);
 
 let getContractInstance = (abi, address) => {
-  const Contract = web3.eth.contract(abi);
-  const instance = Contract.at(address);
+  const instance = new web3.eth.Contract(abi, address);
   return instance;
 }
 
@@ -27,27 +26,19 @@ export const SET_CONTRACT_INFO = 'SET_CONTRACT_INFO'
 export const getEvents = () => {
   return (dispatch, getState) => {
     // TODO: Update this
-    let contractInstance = getContractInstance(Abi, Address);
-    contractInstance.getEvents.call().then(console.log);
-
-    return axios.post(`${API_URL}/login`, {username, password})
-      .then((res) => {
-        console.log('login res: ', res);
-        dispatch({
-          type    : GET_EVENTS,
-          payload : res.user
-        })
-      })
-      .catch((err) => {
-        console.log('login err: ', err);
-      });
+    let contractInstance = getContractInstance(getState().events.abi.terrapin, getState().events.terrapinAddr);
+    console.log('contractInstance: ', contractInstance);
+    return contractInstance.methods.getEvents().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'}, (err, data) => {
+      console.log('calls getEvents');
+      console.log(data);
+    });
   }
 }
 
 export const getContractInfo = () => {
   return (dispatch, getState) => {
     return Promise.resolve({
-      abi: [],
+      abi: { terrapin: Abi },
       terrapinAddr: MASTER_CONTRACT_ADDRESS
     })
     .then((res) => {
@@ -66,7 +57,7 @@ export const clickBuyTicket = () => {
     web3.getsomething
     return axios.post(`${API_URL}/login`, {username, password})
       .then((res) => {
-        console.log('login res: ', res);
+        console.log('res: ', res);
         dispatch({
           type    : CLICK_BUY_TICKET,
           payload : res.user
@@ -98,7 +89,8 @@ export const buyTicket = () => {
 export const actions = {
   getEvents,
   clickBuyTicket,
-  buyTicket
+  buyTicket,
+  getContractInfo
 }
 
 // ------------------------------------

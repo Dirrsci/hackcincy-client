@@ -11,13 +11,16 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    this.props.getContractInfo();
+    this.props.getContractInfo()
+      .then((data) => {
+        this.props.getEvents();
+      });
   }
 
   render() {
     console.log('this.props: ', this.props);
     return (
-      <div className='container' >
+      <div className='events-container' >
           Here is some stuff
       </div>
     )

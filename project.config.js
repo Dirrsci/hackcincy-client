@@ -21,7 +21,7 @@ module.exports = {
   globals: {
     API_URL: JSON.stringify('http://localhost:8080'),
     WEB3_ADDRESS: JSON.stringify('http://192.168.12.226:8545'),
-    MASTER_CONTRACT_ADDRESS: JSON.stringify('0x8700a919361091dda2d9c2e36ebc133dbc0b6a12')
+    MASTER_CONTRACT_ADDRESS: JSON.stringify('0xcc8f7d67f90bafa8d57164a9aec97a24590da088')
   },
   /** Whether to enable verbose logging */
   verbose: false,

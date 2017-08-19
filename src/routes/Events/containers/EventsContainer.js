@@ -18,11 +18,11 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log('state: ', state);
   return {
-    events : state.events,
-    terrapinAddr: state.terrapinAddr,
-    abi: state.abi
+    events : state.events.events,
+    terrapinAddr: state.events.terrapinAddr,
+    abi: state.events.abi
   }
 }
 
