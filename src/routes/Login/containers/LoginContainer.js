@@ -16,10 +16,14 @@ const mapDispatchToProps = {
   login
 }
 
-const mapStateToProps = (state) => ({
-  user : state.user,
-  loginError: state.loginError
-})
+const mapStateToProps = (state) => {
+  console.log('this.state: ', this.state);
+  return {
+    user : state.user,
+    loginError: state.loginError
+  };
+}
+
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
 

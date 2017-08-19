@@ -1,26 +1,20 @@
-export const CREATE_EVENT = 'CREATE_EVENT'
+export const GET_USER_INFO = 'GET_USER_INFO'
 
-export const createEvent = (name, qty, price) => {
+export const getUserInfo = () => {
   return (dispatch, getState) => {
-    // TODO: Update this
-    let contractInstance = getContractInstance(getState().events.abi.terrapin, getState().events.terrapinAddr);
-    console.log('contractInstance: ', contractInstance);
-    return contractInstance.methods.getEvents().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'}, (err, data) => {
-      console.log('calls getEvents');
-      console.log(data);
-    });
+    
   }
 }
 
 export const actions = {
-  createEvent
+  getUserInfo
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [CREATE_EVENT]  : (state, action) => {
+  [GET_USER_INFO]  : (state, action) => {
     return {
       ...state
     }
@@ -31,9 +25,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-    events: null,
-    abi: null,
-    terrapinAddr: null
+    user: null
 }
 export default function loginReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

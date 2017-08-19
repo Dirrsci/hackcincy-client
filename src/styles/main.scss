@@ -12,10 +12,28 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: #f8f8f8;
+  font-family: 'Open Sans', sans-serif;
 }
 
 *,
 *:before,
 *:after {
   box-sizing: inherit;
+}
+
+button {
+  background: #009900;
+  padding:  10px;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+}
+
+button:hover {
+  background: #33cd62;
+  padding:  10px;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
 }

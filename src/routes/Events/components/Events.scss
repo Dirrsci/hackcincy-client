@@ -4,3 +4,14 @@
   justify-content: center;
   align-items: center;
 }
+
+table {
+  tbody {
+    tr {
+      padding: 10px;
+      td{
+        padding: 10px;
+      }
+    }
+  }
+}
