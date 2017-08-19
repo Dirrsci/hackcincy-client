@@ -5,7 +5,7 @@ import './PageLayout.scss'
 
 export const PageLayout = ({ children }) => (
   <div className='container text-center'>
-    <img src={require('./terrapin-tix-logo-revised-vertical.png')} />
+    <img src={require('../assets/img/logo.png')} />
     <div className='navigation'>
       <span className='nav-item'><IndexLink to='/' className='nav-item' activeClassName='page-layout__nav-item--active'>Home</IndexLink></span>
       <span className='nav-item'><Link to='/login' className='nav-item' activeClassName='page-layout__nav-item--active'>Login</Link></span>
