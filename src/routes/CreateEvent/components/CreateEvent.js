@@ -27,21 +27,27 @@ class CreateEvent extends Component {
       <div className='container' >
         <h1>Create Event</h1>
         <label className='label'>
-          <span>Username:</span>
-          <input type="text" value={this.state.username} onChange={(e) => {
+          <span>Event Name:</span>
+          <input type="text" value={this.state.name} onChange={(e) => {
             console.log('e.target.value: ', e.target.value);
-            this.setState({username: e.target.value});
+            this.setState({name: e.target.value});
           }} />
         </label>
         <label className='label'>
-          <span>Password:</span>
-          <input type="text" value={this.state.password} onChange={(e) => {
-            this.setState({password: e.target.value})
+          <span>Qty:</span>
+          <input type="text" value={this.state.qty} onChange={(e) => {
+            this.setState({qty: e.target.value})
+          }} />
+        </label>
+        <label className='label'>
+          <span>Price:</span>
+          <input type="text" value={this.state.price} onChange={(e) => {
+            this.setState({price: e.target.value})
           }} />
         </label>
         <span className='error'>{(this.props.loginError) ? this.props.loginError : null}</span>
         <span className='user'>{(this.props.user) ? this.props.user : null}</span>
-        <button onClick={this.handleSubmit}>Login</button>
+        <button onClick={this.handleSubmit}>Create Event</button>
       </div>
     )
   }
