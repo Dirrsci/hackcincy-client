@@ -18,10 +18,9 @@ class Events extends Component {
   }
 
   render() {
-    console.log('this.props: ', this.props);
     return (
       <div className='events-container' >
-          Here is some stuff
+          Here is some stuffff
       </div>
     )
   }
