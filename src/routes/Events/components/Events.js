@@ -40,7 +40,6 @@ class Events extends Component {
   }
 
   render() {
-    console.log('this.props: ', this.props);
     return (
       <div className='events-container' >
         <table>

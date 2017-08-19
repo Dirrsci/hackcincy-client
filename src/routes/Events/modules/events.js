@@ -1,10 +1,11 @@
-import Web3 from 'web3'
-import Abi from './ABI'
+import axios from 'axios';
+import Web3 from 'web3';
+import pasync from 'pasync';
+import { utils } from 'web3';
+utils.toAsciiOriginal = utils.toAscii;
+utils.toAscii = function(input) { return utils.toAsciiOriginal(input).replace(/\u0000/g, '') };
 
-let Address = '0x8700a919361091dda2d9c2e36ebc133dbc0b6a12';
 let web3 = new Web3(new Web3.providers.HttpProvider(WEB3_ADDRESS));
-
-console.log('web3: ', web3);
 
 let getContractInstance = (abi, address) => {
   const instance = new web3.eth.Contract(abi, address);
@@ -26,28 +27,38 @@ export const SET_CONTRACT_INFO = 'SET_CONTRACT_INFO'
 export const getEvents = () => {
   return (dispatch, getState) => {
     // TODO: Update this
-    let contractInstance = getContractInstance(getState().events.abi.terrapin, getState().events.terrapinAddr);
-    console.log('contractInstance: ', contractInstance);
-    return contractInstance.methods.getEvents().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'}, (err, data) => {
-      console.log('calls getEvents');
-      console.log(data);
-    });
+    const { abis, terrapinAddr } = getState().events;
+    let terrapinInstance = getContractInstance(abis.terrapin.abi, terrapinAddr);
+    return new Promise((resolve, reject) => {
+      terrapinInstance.methods.getEvents().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'}, (err, data) => {
+        if (err) return reject(err);
+        resolve(data);
+      });
+    })
+    .then((eventAddrs) => {
+      let eventInstances = [];
+
+      return pasync.eachSeries(eventAddrs, (eventAddr) => {
+        let eventInstance = getContractInstance(abis.event.abi, eventAddr);
+        eventInstances.push(eventInstance);
+        return eventInstance.methods.name().call({from: '0x5d45ab7cc622298ef32de3cca7f8dc5a45c296d5'})
+          .then((name) => {
+            console.log('name: ', utils.toAscii(name));
+          })
+      });
+    })
   }
 }
 
 export const getContractInfo = () => {
   return (dispatch, getState) => {
-    return Promise.resolve({
-      abi: { terrapin: Abi },
-      terrapinAddr: MASTER_CONTRACT_ADDRESS
-    })
-    .then((res) => {
-      console.log('res: ', res);
-      dispatch({
-        type: SET_CONTRACT_INFO,
-        payload: res
-      })
-    })
+    return axios.get(`${API_URL}/contract-info`)
+      .then((res) => {
+        dispatch({
+          type: SET_CONTRACT_INFO,
+          payload: res.data
+        })
+      });
   }
 }
 
@@ -79,9 +90,6 @@ export const buyTicket = () => {
           type    : BUY_TICKET,
           payload : res.ticket
         })
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }
 }
@@ -106,7 +114,7 @@ const ACTION_HANDLERS = {
   [SET_CONTRACT_INFO]  : (state, action) => {
     return {
       ...state,
-      abi: action.payload.abi,
+      abis: JSON.parse(action.payload.abis),
       terrapinAddr: action.payload.terrapinAddr
     }
   }
@@ -117,7 +125,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
     events: null,
-    abi: null,
+    abis: null,
     terrapinAddr: null
 }
 export default function loginReducer (state = initialState, action) {
