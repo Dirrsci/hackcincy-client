@@ -106,17 +106,49 @@ export const clickBuyTicket = () => {
   }
 }
 
-export const buyTicket = () => {
-  console.log('bought ticket');
+export const buyTicket = (event) => {
   return (dispatch, getState) => {
-    // TODO: Update this
-    web3.getsomething
-      .then((res) => {
-        dispatch({
-          type    : BUY_TICKET,
-          payload : res.ticket
-        })
+    const { privateKey } = getState().login;
+    const { abis, terrapinAddr } = getState().events;
+    const owner = event.owner;
+
+    const eventInstance = getContractInstance(abis.event.abi, event.id);
+    return eventInstance.methods.getTickets().call()
+      .then((ticketAddrs) => {
+        let i;
+        let isAvailable = false;
+        // grab first available
+        for (i = 0; i < ticketAddrs.length; i++) {
+          let ticket = ticketAddrs[i];
+          if (ticket.owner != owner) {
+            isAvailable = true;
+            break;
+          }
+        }
+        if (isAvailable) {
+          // buy ticket
+          // eventInstance.buyTicket().call()
+
+          const ticketInstance = getContractInstance(abis.ticket.abi, ticketAddrs[i]);
+
+          return ticketInstance;
+        } else {
+          // error
+        }
+        console.log('ticketAddrs', ticketAddrs);
       });
+
+    // buy ticket with privateKey
+    //
+    //
+    // // TODO: Update this
+    // web3.getsomething
+    //   .then((res) => {
+    //     dispatch({
+    //       type    : BUY_TICKET,
+    //       payload : res.ticket
+    //     })
+    //   });
   }
 }
 

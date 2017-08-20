@@ -23,15 +23,15 @@ class Events extends Component {
       });
   }
 
-  buyTicket() {
+  buyTicket(event) {
     this.setState({isLoading: true});
     console.log('clicked: ', this.state);
+    this.props.buyTicket(event);
     // TODO: Some stuff
     //.then(() => this.setState({ isLoading: false }))
   }
 
   renderListItem(item, index) {
-    console.log(index%2);
     return (
       <tr key={item.id} className={classNames('eventRow', {'odd': (index%2 == 0)})}>
         <td style={{flex: 2}}>{item.name}</td>
@@ -45,6 +45,7 @@ class Events extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className='events-container' >
         <table>
@@ -75,7 +76,7 @@ class Events extends Component {
           <span className='event-price'>Price: {this.state.selectedEvent && this.state.selectedEvent.price}</span>
           <button
             className={classNames({isLoading: this.state.isLoading, notLoading: !this.state.isLoading })}
-            onClick={() => this.buyTicket()}>{(this.state.isLoading) ? <img src={require('../../../layouts/assets/img/spinner.svg')} />
+            onClick={() => this.buyTicket(this.state.selectedEvent)}>{(this.state.isLoading) ? <img src={require('../../../layouts/assets/img/spinner.svg')} />
             : 'Confirm Purchase'}</button>
         </ReactModal>
       </div>
