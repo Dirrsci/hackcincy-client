@@ -25,7 +25,6 @@ class Events extends Component {
 
   buyTicket(event) {
     this.setState({isLoading: true});
-    console.log('clicked: ', this.state);
     this.props.buyTicket(event);
     // TODO: Some stuff
     //.then(() => this.setState({ isLoading: false }))
@@ -35,8 +34,8 @@ class Events extends Component {
     return (
       <tr key={item.id} className={classNames('eventRow', {'odd': (index%2 == 0)})}>
         <td style={{flex: 2}}>{item.name}</td>
-        <td>{item.price}</td>
-        <td>{item.qty}</td>
+        <td>{item.price} ETH</td>
+        <td>{item.qty} Left</td>
         <td><button onClick={() => {
           this.setState({'buyModalOpen': true, selectedEvent: item })
         }}>Buy Ticket</button></td>
@@ -45,7 +44,6 @@ class Events extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className='events-container' >
         <table>
@@ -71,13 +69,16 @@ class Events extends Component {
           }}
           style={require('./modal-styles.js').default}
         >
-          <h2 className="checkout-header">Payment Information</h2>
-          <span className='event-name'>Name: {this.state.selectedEvent && this.state.selectedEvent.name}</span>
-          <span className='event-price'>Price: {this.state.selectedEvent && this.state.selectedEvent.price}</span>
-          <button
-            className={classNames({isLoading: this.state.isLoading, notLoading: !this.state.isLoading })}
-            onClick={() => this.buyTicket(this.state.selectedEvent)}>{(this.state.isLoading) ? <img src={require('../../../layouts/assets/img/spinner.svg')} />
-            : 'Confirm Purchase'}</button>
+          <h2 className="checkout-header">Buy a Ticket</h2>
+          <div className="event-details">
+            <span className="event-header">Event Details</span>
+            <span className='event-name'><b>Name:</b> {this.state.selectedEvent && this.state.selectedEvent.name}</span>
+            <span className='event-price'><b>Price:</b> {this.state.selectedEvent && this.state.selectedEvent.price} ETH</span>
+            <button
+              className={classNames('purchase-ticket', {isLoading: this.state.isLoading, notLoading: !this.state.isLoading })}
+              onClick={() => this.buyTicket(this.state.selectedEvent)}>{(this.state.isLoading) ? <img src={require('../../../layouts/assets/img/spinner.svg')} />
+              : 'Confirm Purchase'}</button>
+          </div>
         </ReactModal>
       </div>
     )

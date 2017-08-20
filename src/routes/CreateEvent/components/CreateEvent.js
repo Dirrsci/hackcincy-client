@@ -22,14 +22,12 @@ class CreateEvent extends Component {
   }
 
   render() {
-    console.log('this.props: ', this.props);
     return (
       <div className='container' >
         <h1>Create Event</h1>
         <label className='label'>
           <span>Event Name:</span>
           <input type="text" value={this.state.name} onChange={(e) => {
-            console.log('e.target.value: ', e.target.value);
             this.setState({name: e.target.value});
           }} />
         </label>
