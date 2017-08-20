@@ -38,7 +38,7 @@ export const getEvents = () => {
         return pasync.eachSeries(eventAddrs, (eventAddr) => {
           let eventInstance = getContractInstance(abis.event.abi, eventAddr);
           // tickets, name
-          let eventObj = {};
+          let eventObj = { address: eventAddr };
           return Promise.resolve()
             .then(() => eventInstance.methods.owner().call())
             .then((owner) => {
