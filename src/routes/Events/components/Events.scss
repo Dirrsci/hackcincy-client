@@ -31,6 +31,40 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  width: 500px;
+
+
+  .checkout-header {
+    text-align: center;
+  }
+
+  .event-details {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+
+    .event-header {
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .event-name {
+      flex: 1;
+      background: #ececec;
+      padding: 15px;
+    }
+
+    .event-price {
+      flex: 1;
+      padding: 15px;
+
+    }
+
+    .purchase-ticket {
+      flex: 1;
+      padding: 15px;
+    }
+  }
 
   button.notLoading {
     margin-top: 20px !important;

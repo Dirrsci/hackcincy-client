@@ -17,7 +17,6 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => {
-  console.log('this.state: ', this.state);
   return {
     user : state.user,
     loginError: state.loginError

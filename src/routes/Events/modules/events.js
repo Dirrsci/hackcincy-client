@@ -1,11 +1,6 @@
 import axios from 'axios';
-import Web3 from 'web3';
 import pasync from 'pasync';
-import { utils } from 'web3';
-utils.toAsciiOriginal = utils.toAscii;
-utils.toAscii = function(input) { return utils.toAsciiOriginal(input).replace(/\u0000/g, '') };
-
-let web3 = new Web3(new Web3.providers.HttpProvider(WEB3_ADDRESS));
+import web3 from '../../../components/Web3.js';
 
 let getContractInstance = (abi, address) => {
   const instance = new web3.eth.Contract(abi, address);
@@ -46,7 +41,7 @@ export const getEvents = () => {
             })
             .then(() => eventInstance.methods.name().call())
             .then((name) => {
-              eventObj.name = utils.toAscii(name);
+              eventObj.name = web3.utils.toAscii(name);
             })
             .then(() => eventInstance.methods.getTickets().call())
             .then((ticketAddrs) => {
@@ -66,7 +61,6 @@ export const getEvents = () => {
             .then(() => eventInstances.push(eventObj))
         })
         .then(() => {
-          console.log(eventInstances);
           dispatch({
             type: SET_EVENTS,
             payload: eventInstances
@@ -92,16 +86,14 @@ export const clickBuyTicket = () => {
   return (dispatch, getState) => {
     // TODO: Update this
     web3.getsomething
-    return axios.post(`${API_URL}/login`, {username, password})
       .then((res) => {
-        console.log('res: ', res);
         dispatch({
           type    : CLICK_BUY_TICKET,
           payload : res.user
         })
       })
       .catch((err) => {
-        console.log('login err: ', err);
+
       });
   }
 }
@@ -199,10 +191,8 @@ const ACTION_HANDLERS = {
     }
   },
   [SET_EVENTS]: (state, action) => {
-    console.log('action: ', action);
     let events = action.payload.map((event) =>{
       let qty = event.tickets.reduce((sum, ticket) => { return (ticket.owner == event.owner) ? sum + 1 : 0 }, 0);
-      console.log('qty: ', qty);
       return {
         id: event.address,
         name: event.name,
