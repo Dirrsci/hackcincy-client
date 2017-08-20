@@ -17,7 +17,7 @@ export const login = (username, password) => {
         console.log('login res: ', res);
         dispatch({
           type    : LOGIN_SUCCESS,
-          payload : res.user
+          payload : res.data
         })
       })
       .catch((err) => {

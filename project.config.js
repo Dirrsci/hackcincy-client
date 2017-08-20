@@ -19,8 +19,10 @@ module.exports = {
   externals: {},
   /** A hash map of variables and their values to expose globally */
   globals: {
-    API_URL: JSON.stringify('http://192.168.12.226:8080'),
-    WEB3_ADDRESS: JSON.stringify('http://192.168.12.226:8545')
+    API_URL: JSON.stringify('http://localhost:8080'),
+    WEB3_ADDRESS: JSON.stringify('http://localhost:8545')
+    // API_URL: JSON.stringify('http://192.168.12.226:8080'),
+    // WEB3_ADDRESS: JSON.stringify('http://192.168.12.226:8545')
   },
   /** Whether to enable verbose logging */
   verbose: false,
