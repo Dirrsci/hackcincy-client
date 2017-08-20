@@ -53,7 +53,7 @@ class User extends Component {
           <span className='profile-item'>Name: {username}</span>
           <span className='profile-item'>Wallet Address: {walletAddress}</span>
           <span className='profile-item'>Private Key: {privateKey}</span>
-          <span className='profile-item'>Balance: {balance}</span>
+          <span className='profile-item'><b>Balance: {balance} ETH</b></span>
         </div>
 
         <Tabs>
