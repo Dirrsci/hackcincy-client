@@ -156,7 +156,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-    events: null,
+    events: [],
     abis: null,
     terrapinAddr: null
 }
