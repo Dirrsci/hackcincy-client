@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './Login.scss'
+import { browserHistory } from 'react-router';
 
 class Login extends Component {
   constructor(props) {
@@ -13,9 +14,10 @@ class Login extends Component {
   }
 
   handleSubmit() {
-    console.log('this.state.username: ', this.state.username);
-    console.log('this.state.password: ', this.state.password);
-    this.props.login(this.state.username, this.state.password);
+    this.props.login(this.state.username, this.state.password)
+      .then(() => {
+        browserHistory.push('/events');
+      });
   }
 
 
@@ -25,7 +27,6 @@ class Login extends Component {
           <label className='label'>
             <span>Username:</span>
             <input type="text" value={this.state.username} onChange={(e) => {
-              console.log('e.target.value: ', e.target.value);
               this.setState({username: e.target.value});
             }} />
           </label>
