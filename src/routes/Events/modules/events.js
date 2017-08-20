@@ -145,9 +145,20 @@ const ACTION_HANDLERS = {
     }
   },
   [SET_EVENTS]: (state, action) => {
+    console.log('action: ', action);
+    let events = action.payload.map((event) =>{
+      let qty = event.tickets.reduce((sum, ticket) => { return (ticket.owner == event.owner) ? sum + 1 : 0 }, 0);
+      console.log('qty: ', qty);
+      return {
+        id: event.address,
+        name: event.name,
+        qty: qty,
+        price: event.tickets[0].price
+      }
+    });
     return {
       ...state,
-      events: action.payload
+      events: events
     }
   }
 }

@@ -10,13 +10,7 @@ class Events extends Component {
     this.state = {
       isLoading: false,
       selectedEvent: null,
-      events: [
-        { id: 1, name: 'Phish @ MSG', qty: 50, price: 50 },
-        { id: 2, name: 'Dead & Co @ Wrigley Field', qty: 50, price: 50 },
-        { id: 3, name: 'String Cheese Incident @ Electric Forest', qty: 50, price: 50 },
-        { id: 4, name: 'Widespread Panic @ Red Rocks', qty: 50, price: 50 },
-        { id: 5, name: 'Phish @ Loren Airforce Base', qty: 50, price: 50 }
-      ]
+      events: []
     };
     this.renderListItem = this.renderListItem.bind(this);
     this.buyTicket = this.buyTicket.bind(this);
@@ -61,7 +55,7 @@ class Events extends Component {
             <td>Buy</td>
           </th>
           <tbody>
-            {this.state.events.map((event, index) => {
+            {this.props.events.map((event, index) => {
               return this.renderListItem(event, index);
             })}
           </tbody>
@@ -77,8 +71,8 @@ class Events extends Component {
           style={require('./modal-styles.js').default}
         >
           <h2 className="checkout-header">Payment Information</h2>
-          <span className='event-name'>{this.state.item && this.state.item.name}</span>
-          <span className='event-price'>{this.state.item && this.state.item.price}</span>
+          <span className='event-name'>Name: {this.state.selectedEvent && this.state.selectedEvent.name}</span>
+          <span className='event-price'>Price: {this.state.selectedEvent && this.state.selectedEvent.price}</span>
           <button
             className={classNames({isLoading: this.state.isLoading, notLoading: !this.state.isLoading })}
             onClick={() => this.buyTicket()}>{(this.state.isLoading) ? <img src={require('../../../layouts/assets/img/spinner.svg')} />
