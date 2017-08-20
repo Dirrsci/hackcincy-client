@@ -113,42 +113,64 @@ export const buyTicket = (event) => {
     const owner = event.owner;
 
     const eventInstance = getContractInstance(abis.event.abi, event.id);
-    return eventInstance.methods.getTickets().call()
+
+    let eventOwner;
+    return eventInstance.methods.owner().call()
+      .then((owner) => {
+        console.log('eventOwner', owner);
+        eventOwner = owner;
+      })
+      .then(() => eventInstance.methods.getTickets().call())
       .then((ticketAddrs) => {
         let i;
         let isAvailable = false;
         // grab first available
-        for (i = 0; i < ticketAddrs.length; i++) {
-          let ticket = ticketAddrs[i];
-          if (ticket.owner != owner) {
-            isAvailable = true;
-            break;
-          }
-        }
-        if (isAvailable) {
-          // buy ticket
-          // eventInstance.buyTicket().call()
+        let hasBought = false;
+        return pasync.eachSeries(ticketAddrs, (ticketAddr) => {
+          let ticketInstance = getContractInstance(abis.ticket.abi, ticketAddr);
+          return ticketInstance.methods.owner().call()
+            .then((owner) => {
+              if (owner === eventOwner && !hasBought) {
+                hasBought = true;
 
-          const ticketInstance = getContractInstance(abis.ticket.abi, ticketAddrs[i]);
+                // web3.eth.accounts.privateKeyToAccount(privateKey);
+                return web3.eth.getAccounts()
+                  .then((accounts) => {
+                    return ticketInstance.methods.price().call()
+                      .then((price) => {
+                        console.log('instance:', ticketInstance);
 
-          return ticketInstance;
-        } else {
-          // error
-        }
-        console.log('ticketAddrs', ticketAddrs);
+                        return ticketInstance.methods.buyTicket().encodeABI()
+                          .then((abi) => {
+                            console.log('abi:', abi);
+                            console.log(ticketInstance.address);
+
+                            let tx = {
+                              to: ticketInstance.address,
+                              value: price,
+                              gas: 4700000,
+                              data: abi
+                            }
+
+                            return web3.eth.accounts.signTransaction(tx, privateKey)
+                              .then((x) => {
+                                // broadcast transaction
+                                console.log('signed!!', x);
+                              });
+                          })
+                      })
+                      .then(() => {
+                        console.log('after buy');
+                        console.log('bal:', web3.eth.getBalance(accounts[0]));
+                      })
+                  })
+              }
+            });
+        })
+        .then(() => {
+          console.log('buyableTicketAddr', buyableTicketInstance);
+        });
       });
-
-    // buy ticket with privateKey
-    //
-    //
-    // // TODO: Update this
-    // web3.getsomething
-    //   .then((res) => {
-    //     dispatch({
-    //       type    : BUY_TICKET,
-    //       payload : res.ticket
-    //     })
-    //   });
   }
 }
 
